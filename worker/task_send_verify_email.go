@@ -7,6 +7,8 @@ import (
 	"fmt"
 
 	"github.com/hibiken/asynq"
+	db "github.com/rajuputra/simplebank/db/sqlc"
+	"github.com/rajuputra/simplebank/util"
 	"github.com/rs/zerolog/log"
 )
 
@@ -51,16 +53,16 @@ func (processor *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Cont
 		return fmt.Errorf("failed to get user: %w", err)
 	}
 
-	/* verifyEmail, err := processor.store.CreateVerifyEmail(ctx, db.CreateVerifyEmailParams{
+	verifyEmail, err := processor.store.CreateVerifyEmail(ctx, db.CreateVerifyEmailParams{
 		Username:   user.Username,
 		Email:      user.Email,
 		SecretCode: util.RandomString(32),
 	})
 	if err != nil {
 		return fmt.Errorf("failed to create verify email: %w", err)
-	} */
+	}
 
-	/* subject := "Welcome to Simple Bank"
+	subject := "Welcome to Dermawan Bank"
 	// TODO: replace this URL with an environment variable that points to a front-end page
 	verifyUrl := fmt.Sprintf("http://localhost:8080/v1/verify_email?email_id=%d&secret_code=%s",
 		verifyEmail.ID, verifyEmail.SecretCode)
@@ -73,7 +75,7 @@ func (processor *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Cont
 	err = processor.mailer.SendEmail(subject, content, to, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to send verify email: %w", err)
-	} */
+	}
 
 	log.Info().Str("type", task.Type()).Bytes("payload", task.Payload()).
 		Str("email", user.Email).Msg("processed task")

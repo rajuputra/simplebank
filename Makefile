@@ -19,6 +19,9 @@ migratedown:
 migratedown1:
 	 migrate -path db/migration -database "postgres://root:secret@localhost:5432/simple_bank?sslmode=disable" -verbose down 1
 
+new_migration:
+	migrate create -ext sql -dir db/migration -seq $(name)
+
 db_docs:
 	dbdocs build doc/db.dbml
 
@@ -29,13 +32,14 @@ sqlc:
 	sqlc generate
 
 test:
-	go test -v -cover ./...
+	go test -v -cover -short ./...
 
 server:
 	go run main.go
 
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/rajuputra/simplebank/db/sqlc Store
+	mockgen -package mockwk -destination worker/mock/distributor.go github.com/rajuputra/simplebank/worker TaskDistributor
 
 proto:
 	rm -f pb/*.go
@@ -50,4 +54,7 @@ proto:
 evans:
 	evans --host localhost --port 9090 -r --package pb --service SimpleBank repl
 
-.PHONY: postgres createdb dropdb migrateup migratedown evans sqlc test server mock migrateup1 migratedown1 db_docs db_schema proto
+redis:
+	docker run --name redis -p 6379:6379 -d redis:8-alpine
+
+.PHONY: postgres createdb dropdb migrateup migratedown new_migration evans sqlc test redis server mock migrateup1 migratedown1 db_docs db_schema proto
