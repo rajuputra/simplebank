@@ -8,8 +8,10 @@ import (
 
 // Config holds all configuration of the application
 type Config struct {
+	Environtment         string        `mapstructure:"ENVIRONTMENT"`
 	DBDriver             string        `mapstructure:"DB_DRIVER"`
 	DBSource             string        `mapstructure:"DB_SOURCE"`
+	MigrationURL         string        `mapstructure:"MIGRATION_URL"`
 	HTTPServerAddress    string        `mapstructure:"HTTP_SERVER_ADDRESS"`
 	GRPCServerAddress    string        `mapstructure:"GRPC_SERVER_ADDRESS"`
 	TokenSymmetricKey    string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
