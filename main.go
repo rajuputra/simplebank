@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"os"
 
 	"net"
@@ -52,6 +53,9 @@ func main() {
 
 	redisOpt := asynq.RedisClientOpt{
 		Addr: config.RedisAddress,
+		TLSConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
+		},
 	}
 
 	taskDistributor := worker.NewRedisTaskDistributor(redisOpt)
