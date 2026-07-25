@@ -37,7 +37,7 @@ type CreateSessionParams struct {
 }
 
 func (q *Queries) CreateSession(ctx context.Context, arg CreateSessionParams) (Session, error) {
-	row := q.db.QueryRowContext(ctx, createSession,
+	row := q.db.QueryRow(ctx, createSession,
 		arg.ID,
 		arg.Username,
 		arg.RefreshToken,
@@ -66,7 +66,7 @@ WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetSessions(ctx context.Context, id uuid.UUID) (Session, error) {
-	row := q.db.QueryRowContext(ctx, getSessions, id)
+	row := q.db.QueryRow(ctx, getSessions, id)
 	var i Session
 	err := row.Scan(
 		&i.ID,

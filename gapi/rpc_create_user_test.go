@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/lib/pq"
 	mockdb "github.com/rajuputra/simplebank/db/mock"
 	db "github.com/rajuputra/simplebank/db/sqlc"
 	"github.com/rajuputra/simplebank/pb"
@@ -54,13 +53,14 @@ func EqCreateUserTxParams(arg db.CreateUserTxParams, password string, user db.Us
 	return eqCreateUserTxParamsMatcher{arg, password, user}
 }
 
-func randomUser(t *testing.T) (user db.User, password string) {
+func randomUser(t *testing.T, role string) (user db.User, password string) {
 	password = util.RandomString(6)
 	hashedPassword, err := util.HashPassword(password)
 	require.NoError(t, err)
 
 	user = db.User{
 		Username:       util.RandomOwner(),
+		Role:           role,
 		HashedPassword: hashedPassword,
 		FullName:       util.RandomOwner(),
 		Email:          util.RandomEmail(),
@@ -69,7 +69,7 @@ func randomUser(t *testing.T) (user db.User, password string) {
 }
 
 func TestCreateUserAPI(t *testing.T) {
-	user, password := randomUser(t)
+	user, password := randomUser(t, util.DepositorRole)
 
 	testCases := []struct {
 		name          string
@@ -152,7 +152,7 @@ func TestCreateUserAPI(t *testing.T) {
 				store.EXPECT().
 					CreateUserTx(gomock.Any(), gomock.Any()).
 					Times(1).
-					Return(db.CreateUserTxResult{}, &pq.Error{Code: "23505"})
+					Return(db.CreateUserTxResult{}, db.ErrUniqueViolation)
 
 				taskDistributor.EXPECT().
 					DistributeTaskSendVerifyEmail(gomock.Any(), gomock.Any(), gomock.Any()).

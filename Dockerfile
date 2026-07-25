@@ -3,7 +3,7 @@ FROM golang:1.26-alpine3.24 AS builder
 WORKDIR /app
 COPY . .
 RUN go build -o main main.go
-        
+
 
 # Run Stage
 FROM alpine:3.24
@@ -16,6 +16,6 @@ RUN chmod +x start.sh wait-for.sh
 COPY db/migration ./db/migration
 
 
-EXPOSE 8080
+EXPOSE 8080 9090
 CMD [ "/app/main" ]
 ENTRYPOINT [ "/app/start.sh", "/app/main" ]

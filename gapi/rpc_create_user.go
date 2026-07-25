@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/hibiken/asynq"
-	"github.com/lib/pq"
 	db "github.com/rajuputra/simplebank/db/sqlc"
 	pb "github.com/rajuputra/simplebank/pb"
 	"github.com/rajuputra/simplebank/util"
@@ -21,6 +20,7 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 	if violations != nil {
 		return nil, invalidArgumentError(violations)
 	}
+
 	hashedPassword, err := util.HashPassword(req.GetPassword())
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to hash password: %s", err)
@@ -49,11 +49,8 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 
 	txResult, err := server.store.CreateUserTx(ctx, arg)
 	if err != nil {
-		if pqErr, ok := err.(*pq.Error); ok {
-			switch pqErr.Code.Name() {
-			case "unique_violation":
-				return nil, status.Errorf(codes.AlreadyExists, "username already exists: %s", err)
-			}
+		if db.ErrorCode(err) == db.UniqueViolation {
+			return nil, status.Error(codes.AlreadyExists, err.Error())
 		}
 		return nil, status.Errorf(codes.Internal, "failed to create user: %s", err)
 	}
@@ -61,9 +58,7 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 	rsp := &pb.CreateUserResponse{
 		User: convertUser(txResult.User),
 	}
-
 	return rsp, nil
-
 }
 
 func validateCreateUserRequest(req *pb.CreateUserRequest) (violations []*errdetails.BadRequest_FieldViolation) {

@@ -9,7 +9,6 @@ import (
 // Config holds all configuration of the application
 type Config struct {
 	Environtment         string        `mapstructure:"ENVIRONTMENT"`
-	DBDriver             string        `mapstructure:"DB_DRIVER"`
 	DBSource             string        `mapstructure:"DB_SOURCE"`
 	MigrationURL         string        `mapstructure:"MIGRATION_URL"`
 	RedisAddress         string        `mapstructure:"REDIS_ADDRESS"`
