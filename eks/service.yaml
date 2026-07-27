@@ -8,10 +8,14 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: http-server
+      targetPort: 8080
       name: http-service
     - protocol: TCP
+      port: 8081 # Port baru untuk Gin API
+      targetPort: 8081 # Port target Gin API di dalam container
+      name: gin-service
+    - protocol: TCP
       port: 90
-      targetPort: grpc-server
+      targetPort: 9090
       name: grpc-service
   type: ClusterIP

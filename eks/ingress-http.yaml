@@ -1,11 +1,4 @@
 apiVersion: networking.k8s.io/v1
-kind: IngressClass
-metadata:
-  name: nginx
-spec:
-  controller: k8s.io/ingress-nginx
----
-apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: simple-bank-ingress-http
@@ -17,13 +10,22 @@ spec:
     - host: "api.dermawan-bank.my.id"
       http:
         paths:
+          # Aturan 1: Traffic /v1 diarahkan ke gRPC Gateway (port 80)
+          - pathType: Prefix
+            path: "/v1"
+            backend:
+              service:
+                name: simple-bank-api-service
+                port:
+                  number: 80
+          # Aturan 2: Semua traffic lainnya diarahkan ke Gin API (port 8081)
           - pathType: Prefix
             path: "/"
             backend:
               service:
                 name: simple-bank-api-service
                 port:
-                  number: 80
+                  number: 8081
   tls:
     - hosts:
         - api.dermawan-bank.my.id
