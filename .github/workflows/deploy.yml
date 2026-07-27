@@ -58,3 +58,6 @@ jobs:
           kubectl apply -f eks/issuer.yaml
           kubectl apply -f eks/ingress-http.yaml
           kubectl apply -f eks/ingress-grpc.yaml
+          
+          # Memaksa Kubernetes untuk menarik ulang image :latest dan merestart pod
+          kubectl rollout restart deployment simple-bank-api-deployment
