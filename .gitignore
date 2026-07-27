@@ -1,3 +1,4 @@
 *.log
 /tools/
 tmp_server
+app.env
