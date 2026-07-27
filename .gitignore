@@ -1,2 +1,4 @@
 *.log
 /tools/
+app.env
+tmp_server

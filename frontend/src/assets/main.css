@@ -1,0 +1,45 @@
+/* ─── PrimeVue Theme & Icons (must be first @import) ─── */
+@import 'primevue/resources/themes/aura-light-green/theme.css';
+@import 'primeicons/primeicons.css';
+
+/* ─── Tailwind CSS Directives ─── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Global Reset ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Root app container — full viewport, no padding/centering */
+#app {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+/* ─── PrimeVue Toast — ensure on top ─── */
+.p-toast {
+  z-index: 9999 !important;
+}
+
+/* ─── Router link — remove default underline ─── */
+a {
+  text-decoration: none;
+  color: inherit;
+}

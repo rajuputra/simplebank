@@ -9,6 +9,7 @@ import (
 // Config holds all configuration of the application
 type Config struct {
 	Environtment         string        `mapstructure:"ENVIRONTMENT"`
+	AllowedOrigins       []string      `mapstructure:"ALLOWED_ORIGINS"`
 	DBSource             string        `mapstructure:"DB_SOURCE"`
 	MigrationURL         string        `mapstructure:"MIGRATION_URL"`
 	RedisAddress         string        `mapstructure:"REDIS_ADDRESS"`
@@ -20,6 +21,8 @@ type Config struct {
 	EmailSenderPassword  string        `mapstructure:"EMAIL_SENDER_PASSWORD"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
+	FrontEndUrl          string        `mapstructure:"FRONTEND_URL"`
+	GinServerAddress     string        `mapstructure:"GIN_SERVER_ADDRESS"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

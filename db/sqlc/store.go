@@ -12,6 +12,7 @@ type Store interface {
 	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
 	CreateUserTx(ctx context.Context, arg CreateUserTxParams) (CreateUserTxResult, error)
 	VerifyEmailTx(ctx context.Context, arg VerifyEmailTxParams) (VerifyEmailTxResult, error)
+	DepositTx(ctx context.Context, arg DepositTxParams) (DepositTxResult, error)
 }
 
 // SQLStore provides all functions to execute SQL queries and transactions

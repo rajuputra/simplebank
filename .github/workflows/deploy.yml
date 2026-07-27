@@ -6,6 +6,8 @@ name: Deploy to production
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+      - "frontend/**" # Mengabaikan semua perubahan di dalam folder frontend
 
 jobs:
   deploy:
